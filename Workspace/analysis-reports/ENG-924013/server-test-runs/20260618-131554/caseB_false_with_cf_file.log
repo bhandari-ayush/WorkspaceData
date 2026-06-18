@@ -1,0 +1,6 @@
++(eval):8> calm launch bp normal_flow -l /tmp/cfm/v2n/specs/Default_custom_form_runtime_variable.py
+[2026-06-18 07:46:17] [[32mINFO[0m] [calm.dsl.cli.bps:1602] Searching for existing applications with name App-normal_flow-1781768777[0m
+[2026-06-18 07:46:19] [[32mINFO[0m] [calm.dsl.cli.bps:1612] No existing application found with name App-normal_flow-1781768777[0m
+[2026-06-18 07:46:19] [[32mINFO[0m] [calm.dsl.cli.bps:870] normal_flow found [0m
+[2026-06-18 07:46:20] [[32mINFO[0m] [calm.dsl.cli.bps:1652] Fetching runtime editables in the blueprint[0m
+[2026-06-18 07:46:20] [[31mERROR[0m] [calm.dsl.cli.bps:1685] Custom-form runtime editables file 'Default_custom_form_runtime_variable.py' can only be used when the target blueprint profile has use_custom_form=True. Set use_custom_form=True (and recompile), or launch without it to use the default runtime-editable flow.[0m

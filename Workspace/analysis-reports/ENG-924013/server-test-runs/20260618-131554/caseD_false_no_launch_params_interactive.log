@@ -1,0 +1,78 @@
+[2026-06-18 07:48:29] [[32mINFO[0m] [calm.dsl.cli.bps:870] normal_flow found [0m
+[2026-06-18 07:48:29] [[32mINFO[0m] [calm.dsl.cli.bps:1652] Fetching runtime editables in the blueprint[0m
+Blueprint editables are:
+{
+    "substrate_list": [
+        {
+            "name": "VM1",
+            "uuid": "5eefa434-ccff-0c02-2e60-8192ee440b4c",
+            "type": "AHV_VM",
+            "description": "",
+            "value": {
+                "spec": {
+                    "resources": {
+                        "num_sockets": 1,
+                        "num_vcpus_per_socket": 1,
+                        "memory_size_mib": 1024
+                    }
+                }
+            },
+            "context": "app_profile.Default.deployment.deployment_e16a7c7a.substrate"
+        }
+    ]
+}
+
+			SUBSTRATE LIST DATA
+
+-- Substrate app_profile.Default.deployment.deployment_e16a7c7a.substrate.VM1 --
+
+
+vCPUS for the vm [1]: 
+Cores per vCPU for the vm [1]: 
+Memory(GiB) for the vm [1]: [2026-06-18 07:48:32] [[32mINFO[0m] [calm.dsl.cli.bps:2131] Updated blueprint editables are:
+{
+    "substrate_list": [
+        {
+            "name": "VM1",
+            "uuid": "5eefa434-ccff-0c02-2e60-8192ee440b4c",
+            "type": "AHV_VM",
+            "description": "",
+            "value": {
+                "spec": {
+                    "resources": {
+                        "num_sockets": 1,
+                        "num_vcpus_per_socket": 1,
+                        "memory_size_mib": 1024
+                    }
+                }
+            },
+            "context": "app_profile.Default.deployment.deployment_e16a7c7a.substrate"
+        }
+    ]
+}[0m
+[2026-06-18 07:48:33] [[32mINFO[0m] [calm.dsl.cli.bps:2157] Blueprint normal_flow queued for launch[0m
+[2026-06-18 07:48:33] [[32mINFO[0m] [calm.dsl.cli.bps:2173] Polling status of Launch[0m
+[2026-06-18 07:48:33] [[32mINFO[0m] [calm.dsl.cli.bps:2200] running[0m
+[2026-06-18 07:48:43] [[32mINFO[0m] [calm.dsl.cli.bps:2173] Polling status of Launch[0m
+{'api_version': '3.0',
+ 'metadata': {'kind': 'blueprint',
+              'uuid': '0735b795-4990-417d-9f3f-3548f28d1958'},
+ 'status': {'app_name': 'App-normal_flow-1781768907',
+            'application_uuid': None,
+            'bp_name': 'normal_flow',
+            'bp_uuid': '92dd8bc3-04c8-fe3b-4745-4d13dccc0ff1',
+            'message_list': [],
+            'milestone': None,
+            'state': 'running'}}
+{'api_version': '3.0',
+ 'metadata': {'kind': 'blueprint',
+              'uuid': '0735b795-4990-417d-9f3f-3548f28d1958'},
+ 'status': {'app_name': 'App-normal_flow-1781768907',
+            'application_uuid': '716d57f1-baba-49a1-8d1f-e2e58475fee7',
+            'bp_name': 'normal_flow',
+            'bp_uuid': '92dd8bc3-04c8-fe3b-4745-4d13dccc0ff1',
+            'message_list': [],
+            'milestone': 'Succeeded',
+            'state': 'success'}}
+Successfully launched. App uuid is: 716d57f1-baba-49a1-8d1f-e2e58475fee7
+[2026-06-18 07:48:44] [[32mINFO[0m] [calm.dsl.cli.bps:2189] App url: https://10.103.243.86:9440/dm/self_service/applications/716d57f1-baba-49a1-8d1f-e2e58475fee7[0m

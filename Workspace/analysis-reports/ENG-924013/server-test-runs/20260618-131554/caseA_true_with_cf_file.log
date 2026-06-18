@@ -1,0 +1,81 @@
++(eval):6> calm launch bp e2e924013_bp_v2 -l /tmp/cfm/v2n/specs/Default_custom_form_runtime_variable.py
+[2026-06-18 07:47:44] [[32mINFO[0m] [calm.dsl.cli.bps:870] e2e924013_bp_v2 found [0m
+[2026-06-18 07:47:44] [[32mINFO[0m] [calm.dsl.cli.bps:1652] Fetching runtime editables in the blueprint[0m
+[2026-06-18 07:47:45] [[33mWARNING[0m] [calm.dsl.cli.bps:1693] Custom form launch is not supported yet; proceeding with the default launch flow. The custom form definition is retained on the entity.[0m
+Blueprint editables are:
+{
+    "variable_list": [
+        {
+            "name": "env_name",
+            "uuid": "2858985a-172e-4d9d-a408-4b3b39a8eaa5",
+            "type": "LOCAL",
+            "description": "",
+            "value": {
+                "value": "dev"
+            },
+            "context": "app_profile.Default.variable"
+        },
+        {
+            "name": "region",
+            "uuid": "b75f808b-dcdc-40e6-848b-49fbfb794d6b",
+            "type": "EXEC_LOCAL",
+            "description": "",
+            "value": {
+                "value": ""
+            },
+            "context": "app_profile.Default.variable"
+        }
+    ]
+}
+[2026-06-18 07:47:45] [[33mWARNING[0m] [calm.dsl.cli.bps:1907] Values fetched from API/ESCRIPT will not have a default. User will have to select an option at launch.[0m
+[2026-06-18 07:47:45] [[32mINFO[0m] [calm.dsl.cli.bps:2131] Updated blueprint editables are:
+{
+    "variable_list": [
+        {
+            "name": "env_name",
+            "uuid": "2858985a-172e-4d9d-a408-4b3b39a8eaa5",
+            "type": "LOCAL",
+            "description": "",
+            "value": {
+                "value": "dev"
+            },
+            "context": "app_profile.Default.variable"
+        },
+        {
+            "name": "region",
+            "uuid": "b75f808b-dcdc-40e6-848b-49fbfb794d6b",
+            "type": "EXEC_LOCAL",
+            "description": "",
+            "value": {
+                "value": ""
+            },
+            "context": "app_profile.Default.variable"
+        }
+    ]
+}[0m
+[2026-06-18 07:47:47] [[32mINFO[0m] [calm.dsl.cli.bps:2157] Blueprint e2e924013_bp_v2 queued for launch[0m
+[2026-06-18 07:47:47] [[32mINFO[0m] [calm.dsl.cli.bps:2173] Polling status of Launch[0m
+[2026-06-18 07:47:47] [[32mINFO[0m] [calm.dsl.cli.bps:2200] running[0m
+[2026-06-18 07:47:57] [[32mINFO[0m] [calm.dsl.cli.bps:2173] Polling status of Launch[0m
+{'api_version': '3.0',
+ 'metadata': {'kind': 'blueprint',
+              'uuid': 'df1d41d3-6b15-4a4d-a279-3dcf0d29566d'},
+ 'status': {'app_name': 'App-e2e924013_bp_v2-1781768862',
+            'application_uuid': None,
+            'bp_name': 'e2e924013_bp_v2',
+            'bp_uuid': '4e3b5ffa-7aae-495a-9184-5335acb93990',
+            'message_list': [],
+            'milestone': None,
+            'state': 'running'}}
+{'api_version': '3.0',
+ 'metadata': {'kind': 'blueprint',
+              'uuid': 'df1d41d3-6b15-4a4d-a279-3dcf0d29566d'},
+ 'status': {'app_name': 'App-e2e924013_bp_v2-1781768862',
+            'application_uuid': '5b04a88e-d242-411f-b32d-ab92fc0aaf77',
+            'bp_name': 'e2e924013_bp_v2',
+            'bp_uuid': '4e3b5ffa-7aae-495a-9184-5335acb93990',
+            'message_list': [],
+            'milestone': 'Succeeded',
+            'state': 'success'}}
+Successfully launched. App uuid is: 5b04a88e-d242-411f-b32d-ab92fc0aaf77
+[2026-06-18 07:47:57] [[32mINFO[0m] [calm.dsl.cli.bps:2189] App url: https://10.103.243.86:9440/dm/self_service/applications/5b04a88e-d242-411f-b32d-ab92fc0aaf77[0m

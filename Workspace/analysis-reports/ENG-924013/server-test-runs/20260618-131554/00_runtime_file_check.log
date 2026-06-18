@@ -1,0 +1,8 @@
+=== runtime file head (expect NO marker, starts variable_list) ===
+variable_list = [
+    {
+        "value": {
+            "value": "dev"
+=== grep marker (expect none) ===
+0
+0 (no marker)

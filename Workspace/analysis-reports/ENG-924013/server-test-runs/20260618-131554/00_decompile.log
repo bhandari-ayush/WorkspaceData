@@ -1,0 +1,9 @@
+[2026-06-18 07:45:57] [[32mINFO[0m] [calm.dsl.cli.bps:870] e2e924013_bp_v2 found [0m
+[2026-06-18 07:45:59] [[32mINFO[0m] [calm.dsl.cli.bps:764] Decompiling blueprint e2e924013_bp_v2[0m
+[2026-06-18 07:45:59] [[33mWARNING[0m] [calm.dsl.builtins.models.object_type:102] Additional Property (upgrade_runbook) found[0m
+[2026-06-18 07:45:59] [[32mINFO[0m] [calm.dsl.decompile.decompile_render:80] Creating blueprint directory[0m
+[2026-06-18 07:45:59] [[32mINFO[0m] [calm.dsl.decompile.decompile_render:82] Rendering blueprint file template[0m
+[2026-06-18 07:45:59] [[32mINFO[0m] [calm.dsl.decompile.decompile_render:92] Formatting blueprint file using black[0m
+[2026-06-18 07:45:59] [[32mINFO[0m] [calm.dsl.decompile.decompile_render:95] Creating blueprint file[0m
+
+Successfully decompiled. Directory location: /tmp/cfm/v2n. Blueprint location: /tmp/cfm/v2n/blueprint.py
