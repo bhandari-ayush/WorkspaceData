@@ -1,0 +1,2 @@
+date,total_chats,after_chats,after_tok_per_req,after_resend_per_req,after_max_turns,after_tier1,last7_chats,last7_tok_per_req,last7_resend_per_req,last7_max_turns
+2026-07-28,138,18,3609,608846,506,1,10,3498,699130,506
