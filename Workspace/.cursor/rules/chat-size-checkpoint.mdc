@@ -1,0 +1,55 @@
+---
+description: When a chat grows large (roughly >150 turns or very long context), checkpoint it — CCR-compress the accumulated context, write a handoff context.md, and move to a NEW chat that retains all data. Caps the quadratic re-send cost of long chats.
+alwaysApply: true
+---
+
+# Chat-size checkpoint (cap the re-send blowup)
+
+Cursor re-sends the *entire* chat history on **every** turn, so a chat's token cost
+grows ~**quadratically** with its length. Measured on this workspace: the pre-efficiency
+mega-chats (400–2,386 turns) drove **93.8% of all token cost**, at ~11.4M re-sent
+tokens per request. The fix is to **not let a single chat grow unbounded** — checkpoint
+and continue in a fresh chat, carrying the state forward in ONE file.
+
+This composes with `one-chat-per-issue` (new ticket → new chat) and
+`ticket-context-persistence` (the `context.md` feed-me-first file). This rule adds the
+*within-a-single-task* cap: even one ticket's chat should not run to hundreds of turns.
+
+## When to checkpoint (the trigger)
+
+Propose a checkpoint when ANY of these is true:
+- the chat has run **~150+ turns**, or
+- responses are visibly dragging a large history / attachments each turn, or
+- you are about to switch model tier (per `task-tag-routing`) and want a clean handoff, or
+- the user says "getting slow / big / expensive".
+
+Do not checkpoint trivially-short chats, or mid-way through a single atomic edit.
+
+## The checkpoint procedure (retain ALL data, then cut)
+
+1. **Compress the bulky context (CCR).** Route the large accumulated blobs still needed
+   (long logs, big JSON, wide search dumps, long file excerpts) through the active
+   compressor's `compress` tool (`headroom_compress` — see `context-compression.mdc`).
+   Keep the returned `hash` so the originals are retrievable; do **not** lose data.
+2. **Write / update the handoff file** — `analysis-reports/<TICKET>/context.md` for
+   ticket work (per `ticket-context-persistence`), else a scratch `context.md`. It must
+   be a ≤1-screen feed-me-first note capturing everything the next chat needs:
+   `GOAL / STATE (done+pending) / KEY FILES (path:line-range) / VERDICT-or-HYPOTHESIS /
+   KEY EVIDENCE (with where it lives) / CCR hashes for compressed blobs / NEXT step.`
+3. **Announce the cut, don't force it.** Cursor cannot open/close chats
+   programmatically, so tell the user (one `AskQuestion`):
+   > "This chat is ~N turns; re-send cost is climbing. I've compressed the bulky
+   > context and written the handoff to `<path>`. Recommend starting a NEW chat that
+   > reads only that file. `[Start new chat] [Continue here]`"
+4. **In the new chat**, read that ONE `context.md` first (and `headroom_retrieve` any
+   hash only when a specific original is needed) — never re-derive or re-read the whole
+   history.
+
+## Hard rules
+
+- **Never drop data to save tokens.** Compression is reversible (CCR keeps originals via
+  hash); the handoff file must let the new chat reconstruct full context. Efficiency
+  never overrides correctness (`token-efficiency.mdc`, `no-ellipsis-truncation.mdc`).
+- **The agent cannot auto-close or auto-open a Cursor chat** — it can only prepare the
+  handoff and recommend the cut. The user performs the actual new-chat action.
+- Prefer this cut at a **natural seam** (sub-task boundary), not mid-edit.

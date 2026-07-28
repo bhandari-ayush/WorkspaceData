@@ -117,3 +117,34 @@ real change is in the **cost-weighted** view above — the expensive tier-1 mass
 
 Diminishing returns: ranged-reads (Iter 1) and precise-MCP (Iter 3) are already
 working — context-build is only ~9% of last week's volume.
+
+---
+
+## Update — through 2026-07-28 (18 post-go-live chats)
+
+| Window | Chats | Tokens/req | Re-send/req | Max turns |
+|---|---|---|---|---|
+| Before (<07-16) | 120 | 27,205 | 11,439,041 | 2,386 |
+| After (all, ≥07-16) | 18 | 3,554 | 607,372 | 506 |
+| Last 7d (07-22→28) | 10 | 3,426 | 698,811 | 506 |
+
+**Regression flag:** two 07-28 chats grew to **464** and **506** turns (~142k / ~153k
+tokens); one re-entered **Tier-1 (19.5% of after-cost)** and last-7d re-send/request
+rose (698k vs 497k the prior week). This is precisely what `chat-size-checkpoint`
+targets — cut at ~150 turns. Overall still ~99% below baseline; stage mix healthy
+(9% context-build / 91% analysis+output).
+
+## Per-issue model router (added 07-28)
+
+Router `scripts/model-router.py` (self-test 11/11) assigns a token-efficient model per
+issue tier:
+
+| Tag | Tier | Model |
+|---|---|---|
+| explore / lookup / quick | fast | `auto` |
+| fix | code | `gpt-5-codex` |
+| bug / review / pr | balanced | `sonnet-4.5` |
+| design / rca | high | `claude-opus-4-8[effort=high]` |
+
+A/B harness `scripts/model-ab-test.py` (read-only) will validate these with real token
+counts once `cursor-agent login` is done. See `README.md`.
