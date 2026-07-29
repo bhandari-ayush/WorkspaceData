@@ -52,6 +52,32 @@ Checkpoint expectations:
 - Leaf worker logs show concrete external call/result.
 - Callback updates upstream state and final status.
 
+### 3.1 Service responsibilities (what each does)
+
+| Service | What it does in launch flow | What to verify first |
+|---|---|---|
+| `styx` (nucalm) | API ingress, auth/context, request shaping | request accepted, request id present, payload not truncated |
+| `jove` (nucalm) | orchestration scheduling and dispatch control | runlog/action created and queued correctly |
+| `hercules` (nucalm) | compiles action/workflow plan for execution | generated plan has expected tasks/stages |
+| `zaffi` (epsilon) | epsilon API entrypoint for workflow execution | workflow start accepted, callback metadata present |
+| `durga` (epsilon) | graph walker/parser, task graph and transitions | macros/types resolved, child task graph created |
+| `jove` (epsilon) | dispatches executable tasks to workers | leaf tasks assigned to correct worker type |
+| `indra` (epsilon) | cloud/platform/API-heavy execution tasks | external endpoint/API errors, retry/backoff behavior |
+| `arjun` (epsilon) | shell/script execution (linux) | command payload, stdout/stderr, exit code |
+| `karan` (epsilon) | powershell/windows task execution | script invocation correctness and host connectivity |
+| `narad` (epsilon) | completion/notification propagation | completion callback fired with correct status |
+| `iris` (nucalm) | upstream callback/state reconciliation | final runlog status mapped correctly |
+| `ergon` | durable task state/milestone lifecycle | expected milestone progression and terminal status |
+
+### 3.2 App launch triage by stage
+
+1. **Ingress stage** (`styx`, `zaffi`): validate request was accepted and correlated id exists.
+2. **Plan stage** (`hercules`, `durga`): validate generated graph and parsed runtime inputs.
+3. **Dispatch stage** (`epsilon jove`): validate queue and worker assignment.
+4. **Execution stage** (`indra`/`arjun`/`karan`): isolate failing leaf task and concrete error.
+5. **Callback stage** (`narad`, `iris`): validate state propagation and runlog convergence.
+6. **State stage** (`ergon`): validate transitions and reason fields for terminal state.
+
 ## 4) Log locations (primary)
 
 Host-level:
@@ -241,3 +267,58 @@ Avoid pasting huge raw logs directly in chat unless needed for an exact quote.
   - number of false paths.
 - If request count crosses 40, checkpoint and summarize before continuing.
 - At 50 requests, stop and decide whether to continue with narrowed scope.
+
+## 14) Graph engineering loop (from your image)
+
+Use this loop only when user explicitly asks for a planned multi-step execution (or explicitly starts with `bug:` for bug workflows).
+
+```
+Task
+ -> Planner
+ -> Worker
+ -> Reviewer 1..N (parallel where possible)
+ -> Synthesize
+ -> Pass?
+    -> no: feedback -> Worker (iterate with revision cap)
+    -> yes: Turn into actionable output
+ -> Plan Reviewer
+ -> Send to user
+```
+
+### 14.1 Node contract for local usage
+
+- `Planner`: converts task into scoped plan + acceptance criteria + constraints.
+- `Worker`: executes one scoped unit at a time; emits artifacts and evidence.
+- `Reviewer(s)`: independent verification (quality, correctness, security, testability).
+- `Synthesize`: merges reviewer outputs into one verdict + actionable deltas.
+- `Pass gate`: deterministic threshold check (not free-text judgement).
+- `Plan Reviewer`: final coherence check before user-facing output.
+
+### 14.2 Hard guards
+
+- Use typed state shared across nodes (objective, constraints, artifacts, verdicts).
+- Cap revision loops (`max_revisions`, `recursion_limit`) to avoid cost runaway.
+- Keep reviewer read-only and independent from worker output claims.
+- Require structured outputs for routing (`PASS|PARTIAL|FAIL|BLOCKED`).
+- Separate reasoning nodes from side-effect nodes (commit/push/deploy).
+
+### 14.3 Inputs user should provide to start graph loop
+
+```text
+Task: <one line goal>
+Mode: planning | execution | bug
+Scope: <repos/files/services>
+Acceptance criteria: <bullet list>
+Constraints: <time/budget/risk/compliance>
+Evidence/resources: <logs, links, files, IDs>
+Side-effects allowed: yes/no (commit, push, deploy)
+```
+
+### 14.4 Bug-mode opt-in rule
+
+Graph bug flow should run only when user explicitly marks start with one of:
+- `bug:`
+- `[bug]`
+- `rca:`
+
+Else default to normal single-agent flow to conserve requests/tokens.

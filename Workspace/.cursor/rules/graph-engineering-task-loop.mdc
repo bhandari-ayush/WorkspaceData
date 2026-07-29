@@ -1,0 +1,47 @@
+# Graph engineering task loop (local usage)
+
+Use this graph pattern when the user asks for planning/execution across multiple steps, reviewers, or explicit quality gates.
+
+## Activation
+
+Activate graph loop when either is true:
+- user explicitly asks for planning with multiple deliverables/roles, or
+- user marks bug/RCA mode explicitly (`bug:`, `[bug]`, `rca:`).
+
+Do not activate for trivial one-shot tasks.
+
+## Graph
+
+```
+Task -> Planner -> Worker -> Reviewer 1..N -> Synthesize -> Pass?
+  -> no: feedback -> Worker (bounded loop)
+  -> yes: actionable output -> Plan Reviewer -> User
+```
+
+## Output contract per node
+
+- Planner: scoped plan + acceptance criteria + risks.
+- Worker: artifact/evidence only for assigned subtask.
+- Reviewers: structured verdict (`PASS|PARTIAL|FAIL|BLOCKED`) and exact issues.
+- Synthesize: merged verdict and prioritized fix list.
+- Plan Reviewer: final packaging quality check.
+
+## Hard constraints
+
+- Keep reviewer independent from worker (no self-verification).
+- Use structured router outputs; avoid free-text branching.
+- Cap loops (`max_revisions`, recursion limit) to avoid cost blowups.
+- Gate side effects (commit/push/deploy) behind explicit user approval.
+- Track request count and stop/escalate at configured budget limits.
+
+## Required user input template
+
+```text
+Task: <one line goal>
+Mode: planning | execution | bug
+Scope: <repos/files/services>
+Acceptance criteria: <bullet list>
+Constraints: <token/time/risk>
+Resources: <paths/ids/log lines>
+Allowed side effects: <none|commit|push|deploy>
+```
